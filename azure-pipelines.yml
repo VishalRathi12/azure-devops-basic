@@ -1,36 +1,32 @@
+---
 trigger:
-- main
+  - main
 
 stages:
-- stage: LintStage
-  displayName: "Lint Scan Stage"
-  jobs:
-  - job: YamlLintJob
-    displayName: "YAML Lint Job"
-    pool:
-      name: Default
-    steps:
-    - script: |
-        echo "Installing yamllint..."
-        pip3 install --user yamllint
+  - stage: LintStage
+    displayName: "Lint Scan Stage"
+    jobs:
+      - job: YamlLintJob
+        displayName: "YAML Lint Job"
+        pool:
+          name: Default
+        steps:
+          - script: |
+              pip3 install --user yamllint
+              export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+              yamllint .
+            displayName: "Run YAML Lint"
 
-        echo "Adding yamllint to PATH..."
-        export PATH="$HOME/Library/Python/3.9/bin:$PATH"
-
-        echo "Running YAML lint..."
-        yamllint .
-      displayName: "Run YAML Lint"
-
-- stage: BasicStage
-  displayName: "Read File Stage"
-  dependsOn: LintStage
-  jobs:
-  - job: ReadFileJob
-    pool:
-      name: Default
-    steps:
-    - script: |
-        echo "Pipeline started"
-        cat note.txt
-        echo "Pipeline finished"
-      displayName: "Read text file"
+  - stage: BasicStage
+    displayName: "Read File Stage"
+    dependsOn: LintStage
+    jobs:
+      - job: ReadFileJob
+        pool:
+          name: Default
+        steps:
+          - script: |
+              echo "Pipeline started"
+              cat note.txt
+              echo "Pipeline finished"
+            displayName: "Read text file"
