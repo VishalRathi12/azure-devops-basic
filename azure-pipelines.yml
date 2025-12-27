@@ -1,12 +1,16 @@
 trigger:
 - main
 
-pool:
-  name: Default
+stages:
+- stage: BasicStage
+  jobs:
+  - job: ReadFileJob
+    pool:
+      name: Default   # 👈 THIS IS THE KEY FIX
+    steps:
+    - script: |
+        echo "Pipeline started"
+        cat note.txt
+        echo "Pipeline finished"
+      displayName: 'Read text file'
 
-steps:
-- script: |
-    echo "Pipeline started"
-    cat note.txt
-    echo "Pipeline finished"
-  displayName: 'Read text file'
