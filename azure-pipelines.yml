@@ -8,11 +8,14 @@ stages:
   - job: YamlLintJob
     displayName: "YAML Lint Job"
     pool:
-      name: Default   # your Mac agent
+      name: Default
     steps:
     - script: |
         echo "Installing yamllint..."
-        pip3 install yamllint
+        pip3 install --user yamllint
+
+        echo "Adding yamllint to PATH..."
+        export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 
         echo "Running YAML lint..."
         yamllint .
