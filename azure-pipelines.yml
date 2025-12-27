@@ -1,0 +1,12 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    echo "Pipeline started"
+    cat note.txt
+    echo "Pipeline finished"
+  displayName: 'Read text file'
