@@ -2,15 +2,32 @@ trigger:
 - main
 
 stages:
+- stage: LintStage
+  displayName: "Lint Scan Stage"
+  jobs:
+  - job: YamlLintJob
+    displayName: "YAML Lint Job"
+    pool:
+      name: Default   # your Mac agent
+    steps:
+    - script: |
+        echo "Installing yamllint..."
+        pip3 install yamllint
+
+        echo "Running YAML lint..."
+        yamllint .
+      displayName: "Run YAML Lint"
+
 - stage: BasicStage
+  displayName: "Read File Stage"
+  dependsOn: LintStage
   jobs:
   - job: ReadFileJob
     pool:
-      name: Default   # 👈 THIS IS THE KEY FIX
+      name: Default
     steps:
     - script: |
         echo "Pipeline started"
         cat note.txt
         echo "Pipeline finished"
-      displayName: 'Read text file'
-
+      displayName: "Read text file"
